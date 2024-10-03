@@ -2,12 +2,12 @@ from flask import request, jsonify
 
 from model.transacao import Transacao
 from database.sessao import db
+
 def register_routes(app):
     @app.route('/transacao', methods = ['POST'])
 
     def criar_transacao():
         data = request.get_json()
-
 
         nova_transacao = Transacao(
             conta = data.get('conta'),
@@ -19,5 +19,5 @@ def register_routes(app):
         db.session.add(nova_transacao)
         db.session.commit()
 
-    
         return jsonify({"mensagem": 'tresacao realizada'}), 200
+    

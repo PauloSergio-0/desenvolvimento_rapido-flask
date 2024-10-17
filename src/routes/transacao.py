@@ -1,10 +1,11 @@
 from flask import request, jsonify
 
-from model.transacao import Transacao
+
 from database.sessao import db
+from model.transacao import Transacao
 
 def register_routes(app):
-    @app.route('/transacao', methods = ['POST'])
+    @app.route('/cadastrar/transacao', methods = ['POST'])
 
     def criar_transacao():
         data = request.get_json()
@@ -21,3 +22,18 @@ def register_routes(app):
 
         return jsonify({"mensagem": 'tresacao realizada'}), 200
     
+
+    @app.route('/listar/transacao', methods = ['GET'])
+
+    def listar_transacao():
+        transacoes = Transacao.query.all()
+        
+        resultado = [{
+        'id': transacao.Id,
+        'conta':transacao.conta,
+        'agencia': transacao.agencia,
+        'texto': transacao.texto,
+        'valor': transacao.valor
+        } for transacao in transacoes]
+
+        return jsonify(resultado), 200

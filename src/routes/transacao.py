@@ -37,3 +37,55 @@ def register_routes(app):
         } for transacao in transacoes]
 
         return jsonify(resultado), 200
+    
+
+
+    @app.route("/transacao/<int:id>", methods = ['GET'])
+    def pegar_transacao(id):
+        transacao = Transacao.query.get_or_404(id)
+
+        resultado = transacao.__dict__
+        del resultado['sa_instance_state']
+        return jsonify({"detail": resultado}), 200
+    
+    @app.route("/transacao/<int:id>", methods = ['DELETE'])
+    def pegar_transacao(id):
+        transacao = Transacao.query.get_or_404(id)
+
+        db.session.delete(transacao)
+
+        db.session.commit()
+        return jsonify({"detail": "foi"}), 200
+    
+    
+    @app.route("atualizacao/transacao/<int:id>", methods = ['PUT'])
+    def pegar_transacao(id):
+        data = request.get_json()
+        transacao = Transacao.query.get_or_404(id)
+
+
+        transacao.conta = data.get('conta', transacao.conta)
+        transacao.agencia = data.get('agencia', transacao.agencia)
+        transacao.texto = data.get('texto', transacao.texto)
+        transacao.valor = data.get('valor', transacao.valor)
+
+        db.session.add(transacao)
+        db.session.commit()
+
+        return jsonify({"detail": "foi 2"}), 200
+
+    @app.route("/exclusao/logica/transacao/<int:id>", methods = ['PATCH'])
+    def pegar_transacao(id):
+        data = request.get_json()
+        transacao = Transacao.query.get_or_404(id)
+
+
+        transacao.excluido = data.get('excluido', True.excluido)
+        transacao.agencia = data.get('agencia', transacao.agencia)
+        transacao.texto = data.get('texto', transacao.texto)
+        transacao.valor = data.get('valor', transacao.valor)
+
+        db.session.add(transacao)
+        db.session.commit()
+
+        return jsonify({"detail": "foi 2"}), 200
